@@ -8,6 +8,6 @@ Download the script. Open up a terminal and execute the script with python3:
 
 `python3 youtubeDownloader.py`
 
-Then enter the `URL`, type `mp3` for audio and `mp4` for video file and enter a destination directory (optional)
+Then enter the `URL`, type `mp3` for audio or `mp4` for video file and enter a destination directory (optional)
 
 Voilá your file is downloaded!
