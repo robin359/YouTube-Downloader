@@ -15,7 +15,7 @@ def download_video(video, format, destination, progress_bar):
 
     # Downloading file
     print("Downloading...")
-    out_file = ys.download(output_path=destination, filename_prefix="downloading_")
+    out_file = ys.download(output_path=destination)
 
     # Changing file extension if user chose mp3
     if format == "mp3":
