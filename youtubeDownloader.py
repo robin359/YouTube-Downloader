@@ -2,9 +2,10 @@ from pytube import YouTube, Playlist
 import os
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import ttk
 
 
-def download_video(video, format, destination):
+def download_video(video, format, destination, progress_bar):
     if format == "mp3":
         ys = video.streams.filter(only_audio=True).first()
     elif format == "mp4":
@@ -14,7 +15,7 @@ def download_video(video, format, destination):
 
     # Downloading file
     print("Downloading...")
-    out_file = ys.download(output_path=destination)
+    out_file = ys.download(output_path=destination, filename_prefix="downloading_")
 
     # Changing file extension if user chose mp3
     if format == "mp3":
@@ -23,6 +24,7 @@ def download_video(video, format, destination):
         os.rename(out_file, new_file)
 
     print("Download completed.")
+    progress_bar.stop()
 
 
 def download():
@@ -56,6 +58,10 @@ def download():
     choose_destination_button = tk.Button(root, text="Choose directory", command=choose_destination)
     choose_destination_button.grid(row=2, column=2)
 
+    # Create progress bar
+    progress_bar = ttk.Progressbar(root, orient="horizontal", length=200, mode="indeterminate")
+    progress_bar.grid(row=3, column=1)
+
     def start_download():
         url = url_entry.get()
         # Check if input URL is a playlist
@@ -66,8 +72,10 @@ def download():
             # Enter destination directory
             destination = destination_var.get()
 
+            progress_bar.start()
+
             for video in playlist.videos:
-                download_video(video, format, destination)
+                download_video(video, format, destination, progress_bar)
 
         else:
             # If input URL is not a playlist, download the single video
@@ -76,14 +84,20 @@ def download():
             format = format_var.get()
             # Enter destination directory
             destination = destination_var.get()
-            download_video(yt, format, destination)
+
+            progress_bar.start()
+
+            download_video(yt, format, destination, progress_bar)
 
     # Create download button
     download_button = tk.Button(root, text="Download", command=start_download)
-    download_button.grid(row=3, column=1)
+    download_button.grid(row=4, column=1)
+
+    # Create quit button
+    quit_button = tk.Button(root, text="Quit", command=root.destroy)
+    quit_button.grid(row=4, column=0)
 
     root.mainloop()
-
 
 if __name__ == "__main__":
     download()
